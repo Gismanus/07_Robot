@@ -75,24 +75,24 @@ function runRobot(state, robot, memory) {
     }
 }
 
-function randomPick(array){
+function randomPick(array) {
     let choice = Math.floor(Math.random() * array.length);
     return array[choice];
 }
 
-function randomRobot(state){
-    return {direction: randomPick(roadGraph[state.place])};
+function randomRobot(state) {
+    return { direction: randomPick(roadGraph[state.place]) };
 }
 
-VillageState.random = function(parcelCount = 5) {
+VillageState.random = function (parcelCount = 5) {
     let parcels = [];
     for (let i = 0; i < parcelCount; i++) {
         let address = randomPick(Object.keys(roadGraph));
         let place;
         do {
             place = randomPick(Object.keys(roadGraph));
-        } while(place == address);
-        parcels.push({place, address});
+        } while (place == address);
+        parcels.push({ place, address });
     }
     console.log(parcels);
     return new VillageState('Post Office', parcels);
@@ -106,5 +106,18 @@ function routeRobot(state, memory) {
     if (memory.length == 0) {
         memory = mailRoute;
     }
-    return {direction: memory[0], memory: memory.slice(1)};
+    return { direction: memory[0], memory: memory.slice(1) };
+}
+
+function findRoute(graph, from, to) {
+    let work = [{ at: from, route: [] }];
+    for (let i = 0; i < work.length; i++) {
+        let { at, route } = work[i];
+        for (let place of graph[at]) {
+            if (place == to) return route.concat(place);
+            if (!work.some(w => w.at == place)) {
+                work.push({ at: place, route: route.concat(place) });
+            }
+        }
+    }
 }
