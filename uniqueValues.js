@@ -24,3 +24,4 @@ function collect(arr){
   return newArr;
 }
 console.log(collect(edges))
+console.log(roads.reduce((flat, current) => flat.concat(current), []));

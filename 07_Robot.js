@@ -18,9 +18,12 @@ function buildGraph(edges) {
     let graph = Object.create(null);
     function addEdge(from, to) {
         if (graph[from] == null) {
+            /*             console.log(graph[from], 1);
+                        console.log(to, 1);     */
             graph[from] = [to];
         } else {
             graph[from].push(to);
+            /*             console.log(graph[from], 2); */
         }
     }
     for (let [from, to] of edges.map(r => r.split("-"))) {
@@ -30,4 +33,33 @@ function buildGraph(edges) {
     return graph;
 }
 const roadGraph = buildGraph(roads);
-console.log(roadGraph)
+//console.log(roadGraph);
+
+class VillageState {
+    constructor(place, parcels) {
+        this.place = place;
+        this.parcels = parcels;
+    }
+
+    move(destination) {
+        if (!roadGraph[this.place].includes(destination)) {
+            return this;
+        } else {
+            let parcels = this.parcels.map(p => {
+                if (p.place != this.place) return p;
+                return { place: destination, address: p.address };
+            }).filter(p => p.place != p.address);
+            return new VillageState(destination, parcels);
+        }
+    }
+}
+
+let first = new VillageState(
+    "Post Office",
+    [{ place: 'Post Office', address: 'Alice\'s House' }]
+);
+let next = first.move('Marketplace');
+console.log(first);
+console.log(next);
+//console.log(next.parcels);
+
