@@ -99,3 +99,12 @@ VillageState.random = function(parcelCount = 5) {
 }
 
 runRobot(VillageState.random(), randomRobot);
+
+const mailRoute = ['Cabin', 'Alice\'s House', 'Post Office', 'MarketPlace', 'Farm', 'Grete\'s House', 'Shop', 'Ernie House', 'Daria\'s House', 'Town Hall', 'Bob\'s House', 'Alice\'s House', 'Cabin']
+
+function routeRobot(state, memory) {
+    if (memory.length == 0) {
+        memory = mailRoute;
+    }
+    return {direction: memory[0], memory: memory.slice(1)};
+}
