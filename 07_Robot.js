@@ -58,18 +58,18 @@ let first = new VillageState(
     "Post Office",
     [{ place: 'Post Office', address: 'Alice\'s House' }]
 );
-let next = first.move('Alice\'s House');
-console.log(first);
-console.log(next);
+// let next = first.move('Alice\'s House');
+// console.log(first);
+// console.log(next);
 
 function runRobot(state, robot, memory) {
     for (let turn = 0; ; turn++) {
         if (state.parcels.length == 0) {
-            consolele.log(`Completed in ${turn} moves`);
+            console.log(`Completed in ${turn} moves`);
             break;
         }
         let action = robot(state, memory);
-        state = state.move(action, direction);
+        state = state.move(action.direction);
         memory = action.memory;
         console.log(`Move in ${action.direction}`);
     }
@@ -94,6 +94,8 @@ VillageState.random = function(parcelCount = 5) {
         } while(place == address);
         parcels.push({place, address});
     }
+    console.log(parcels);
     return new VillageState('Post Office', parcels);
 }
 
+runRobot(VillageState.random(), randomRobot);
