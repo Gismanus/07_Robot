@@ -181,7 +181,7 @@ window.onload = (function () {
         this.robotElt = this.node.appendChild(doc.createElement("div"))
         this.robotElt.style.cssText = `position: absolute; transition: left ${0.8 / speed}s, top ${0.8 / speed}s;`
         let robotPic = this.robotElt.appendChild(doc.createElement("img"))
-        robotPic.src = "img/robot_moving2x.gif"
+        robotPic.src = "img/robot_moving.png"
         this.parcels = []
   
         this.text = this.node.appendChild(doc.createElement("span"))
@@ -239,7 +239,7 @@ window.onload = (function () {
         if (this.worldState.parcels.length == 0) {
           this.button.remove()
           this.text.textContent = ` Finished after ${this.turn} turns`
-          this.robotElt.firstChild.src = "img/robot_idle2x.png"
+          this.robotElt.firstChild.src = "img/robot_idle2x.svg"
         } else {
           this.schedule()
         }
@@ -253,12 +253,12 @@ window.onload = (function () {
         if (this.timeout == null) {
           this.schedule()
           this.button.textContent = "Stop"
-          this.robotElt.firstChild.src = "img/robot_moving2x.gif"
+          this.robotElt.firstChild.src = "img/robot_moving.svg"
         } else {
           clearTimeout(this.timeout)
           this.timeout = null
           this.button.textContent = "Start"
-          this.robotElt.firstChild.src = "img/robot_idle2x.png"
+          this.robotElt.firstChild.src = "img/robot_idle2x.svg"
         }
       }
     }
