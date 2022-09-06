@@ -1,4 +1,4 @@
-var roads = [
+let roads = [
   "Alice's House-Bob's House",
   "Alice's House-Cabin",
   "Alice's House-Post Office",
@@ -17,12 +17,12 @@ var roads = [
 function buildGraph(edges) {
   let graph = Object.create(null);
   function addEdge(from, to) {
-    if (graph[from] == null) {
+    if (graph[from] != null) {
       /*             console.log(graph[from], 1);
                   console.log(to, 1);     */
-      graph[from] = [to];
-    } else {
       graph[from].push(to);
+    } else {
+      graph[from] = [to];
       /*             console.log(graph[from], 2); */
     }
   }
@@ -45,6 +45,7 @@ class VillageState {
     if (!roadGraph[this.place].includes(destination)) {
       return this;
     } else {
+      console.log(this);
       let parcels = this.parcels.map(p => {
         if (p.place != this.place) return p;
         return { place: destination, address: p.address };
@@ -84,7 +85,7 @@ function randomRobot(state) {
   return { direction: randomPick(roadGraph[state.place]) };
 }
 
-VillageState.random = function (parcelCount = 5) {
+VillageState.random = function (parcelCount = 10) {
   let parcels = [];
   for (let i = 0; i < parcelCount; i++) {
     let address = randomPick(Object.keys(roadGraph));
@@ -94,13 +95,10 @@ VillageState.random = function (parcelCount = 5) {
     } while (place == address);
     parcels.push({ place, address });
   }
-  console.log(parcels);
   return new VillageState('Post Office', parcels);
 }
 
-
-
-var mailRoute = [
+let mailRoute = [
   "Alice's House", "Cabin", "Alice's House", "Bob's House",
   "Town Hall", "Daria's House", "Ernie's House",
   "Grete's House", "Shop", "Grete's House", "Farm",
@@ -216,9 +214,10 @@ window.onload = (function () {
         let node = document.createElement("div")
         let offset = placeKeys.indexOf(address) * 16
         node.style.cssText = "position: absolute; height: 16px; width: 16px; background-image: url(img/parcel2x.png); background-position: 0 -" + offset + "px";
+        
         if (place == this.worldState.place) {
           node.style.left = "25px"
-          node.style.bottom = (20 + height) + "px"
+          node.style.bottom = (20 + height * 1.5) + "px"
           this.robotElt.appendChild(node)
         } else {
           let pos = places[place]
