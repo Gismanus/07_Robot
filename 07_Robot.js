@@ -48,7 +48,7 @@ class VillageState {
       console.log(this);
       let parcels = this.parcels.map(p => {
         if (p.place != this.place) return p;
-        return { place: destination, address: p.address };
+        return { startPlace: p.startPlace, place: destination, address: p.address };
       }).filter(p => p.place != p.address);
       return new VillageState(destination, parcels);
     }
@@ -85,7 +85,7 @@ function randomRobot(state) {
   return { direction: randomPick(roadGraph[state.place]) };
 }
 
-VillageState.random = function (parcelCount = 10) {
+VillageState.random = function (parcelCount = 5) {
   let parcels = [];
   for (let i = 0; i < parcelCount; i++) {
     let address = randomPick(Object.keys(roadGraph));
@@ -93,7 +93,9 @@ VillageState.random = function (parcelCount = 10) {
     do {
       place = randomPick(Object.keys(roadGraph));
     } while (place == address);
-    parcels.push({ place, address });
+    let startPlace = place;
+    
+    parcels.push({ place, address, startPlace });
   }
   return new VillageState('Post Office', parcels);
 }
@@ -208,12 +210,13 @@ window.onload = (function () {
     updateParcels() {
       while (this.parcels.length) this.parcels.pop().remove()
       let heights = {}
-      for (let { place, address } of this.worldState.parcels) {
+      for (let { place, address, startPlace } of this.worldState.parcels) {
         let height = heights[place] || (heights[place] = 0)
         heights[place] += 14
         let node = document.createElement("div")
         let offset = placeKeys.indexOf(address) * 16
-        node.style.cssText = "position: absolute; height: 16px; width: 16px; background-image: url(img/parcel2x.png); background-position: 0 -" + offset + "px";
+        node.style.cssText = "position: absolute; height: 16px; line-height: 8px; font-size: 8px; width: 16px; background-image: url(img/parcel2x.png); background-position: 0 -" + offset + "px";
+        node.innerHTML = "<div style='position: relative; left: 16px; width: 70px'>from: " + startPlace + "</div><div style='position: relative; left: 16px; width: 70px'>to: " + address + "</div>"
         
         if (place == this.worldState.place) {
           node.style.left = "25px"
@@ -268,4 +271,4 @@ window.onload = (function () {
     active = new Animation(worldState, robot, robotState)
   }
 })()
-window.runRobotAnimation(VillageState.random(), routeRobot, mailRoute)
+window.runRobotAnimation(VillageState.random(), goalOrientedRobot, mailRoute)
